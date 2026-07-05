@@ -1,0 +1,92 @@
+specification: FinOps Framework
+specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: Memberful
+providerId: memberful
+created: '2026-07-05'
+modified: '2026-07-05'
+reconciled: false
+tags:
+- Memberships
+- Subscriptions
+- Payments
+- Creators
+- FinOps
+- Cost Management
+- FOCUS
+description: >-
+  FinOps view of Memberful spend. Memberful (owned by Patreon) bills a flat
+  platform subscription plus a percentage transaction fee on membership revenue;
+  the GraphQL API, OAuth SSO, and webhooks carry no separate metered API charge.
+  On the published Standard plan that is $49/month plus a 4.9% Memberful
+  transaction fee, and Stripe separately charges its own ~2.9% + $0.30 per
+  transaction for payment processing. Cost therefore has a fixed component (the
+  monthly base) and a variable component that scales with membership revenue and
+  transaction count, so per-transaction economics get worse with many small
+  payments and better with fewer large ones. Enterprise is custom-priced.
+notes: >-
+  The base ($49/mo) and Memberful transaction fee (4.9%) are grounded on
+  Memberful's pricing page; Stripe's ~2.9% + $0.30 is a separate processor cost.
+  Per-unit Enterprise rates are not reconciled. Verify current numbers on
+  memberful.com/pricing.
+sources:
+- https://memberful.com/pricing/
+- https://memberful.com/help/custom-development-and-api/memberful-api/
+- https://focus.finops.org/focus-specification/v1-3/
+alignedWith:
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+  dataSpec: FOCUS
+  dataSpecVersion: '1.3'
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+publisherName: Memberful
+serviceCategory: Membership and Subscription Commerce
+billingModel:
+  pricingCategory: Subscription-Plus-Usage
+  billingFrequency: Monthly
+  billingCurrency: USD
+  chargeCategories:
+  - Purchase
+  - Usage
+  - Adjustment
+focusColumns:
+  ServiceName: Memberful
+  ServiceCategory: Membership and Subscription Commerce
+  ProviderName: Memberful
+  PublisherName: Memberful
+  InvoiceIssuerName: Memberful
+  BillingCurrency: USD
+  ChargeCategory: Purchase
+  PricingCategory: Subscription-Plus-Usage
+meters:
+- name: platform_subscription
+  description: Flat monthly platform fee (Standard plan $49/month).
+  unit: months
+  aggregation: sum
+  dimensions:
+  - account
+- name: memberful_transaction_fee
+  description: Percentage fee Memberful charges on membership transaction revenue (4.9% on Standard).
+  unit: revenue
+  aggregation: sum
+  dimensions:
+  - account
+  - plan
+- name: stripe_processing_fee
+  description: Payment processing charged separately by Stripe (~2.9% + $0.30 per transaction).
+  unit: transactions
+  aggregation: sum
+  dimensions:
+  - account
+principles:
+- name: Visibility
+  description: Separate the fixed monthly base from the variable transaction fees, and track the Stripe processing cost apart from Memberful's own fee.
+- name: Allocation
+  description: Attribute transaction fees to the plans/passes driving revenue so cost maps to each membership product.
+- name: Optimization
+  description: Favor fewer, larger transactions (annual over monthly plans) to dilute the flat Stripe $0.30 per-transaction charge; consider Enterprise terms at high volume.
+- name: Accountability
+  description: Review monthly base plus percentage fees against membership revenue to confirm the platform stays economical as volume grows.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

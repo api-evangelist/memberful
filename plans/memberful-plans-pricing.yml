@@ -1,0 +1,141 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: Memberful
+providerId: memberful
+created: '2026-07-05'
+modified: '2026-07-05'
+reconciled: false
+tags:
+- Memberships
+- Subscriptions
+- Payments
+- Creators
+- Plans
+description: >-
+  Memberful (a Patreon-owned company) prices the membership platform itself -
+  the GraphQL API, OAuth SSO, and webhooks are included with a paid plan at no
+  separate API fee. Memberful's own published plan is Standard at $49/month plus
+  a 4.9% Memberful transaction fee on revenue, with unlimited members and the
+  full feature set; Enterprise is custom-priced with dedicated support and
+  migration help. Payment processing runs through Stripe, whose ~2.9% + $0.30
+  per-transaction fee is charged separately by Stripe on top of Memberful's
+  transaction fee. Third-party sources also report Free/Starter (10% fee), Pro
+  ($25/mo), and Premium ($100/mo) tiers; those are NOT confirmed on Memberful's
+  current pricing page and are marked modeled below.
+notes: >-
+  Grounded numbers ($49/month + 4.9% transaction fee; Enterprise custom) are
+  from Memberful's official pricing page as of the review date. Stripe's
+  ~2.9% + $0.30 is a separate processor charge, not a Memberful fee. The
+  Free/Pro/Premium tiers come only from third-party pricing aggregators and are
+  flagged modeled/unconfirmed - verify against memberful.com/pricing before
+  relying on them.
+sources:
+- https://memberful.com/pricing/
+- https://memberful.com/help/custom-development-and-api/memberful-api/
+plans:
+- id: memberful-standard
+  name: Standard
+  type: paid
+  description: >-
+    Memberful's published plan: full platform access with unlimited members,
+    checkout (Apple Pay / Google Pay / coupons / gifting / tax handling),
+    subscriptions and trials, member management and analytics, content tools
+    (podcasts, downloads, courses, newsletters), website/paywall tools, and all
+    integrations. Includes the GraphQL API, OAuth SSO, and webhooks at no extra
+    API fee.
+  entries:
+  - label: Base Subscription
+    name: base_fee
+    type: flat
+    metric: subscription
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $49 per month
+    userMultiplied: false
+  - label: Memberful Transaction Fee
+    name: transaction_fee
+    type: usage
+    metric: revenue
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: 4.9% of transaction revenue
+    userMultiplied: false
+  - label: Stripe Processing (separate)
+    name: stripe_processing
+    type: usage
+    metric: transactions
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: ~2.9% + $0.30 per transaction (charged by Stripe, not Memberful)
+    userMultiplied: false
+  elements:
+  - name: Unlimited Members
+  - name: GraphQL API
+  - name: OAuth SSO
+  - name: Webhooks
+  - name: Checkout and Subscriptions
+  - name: Member Management and Analytics
+  - name: Content and Website Tools
+  - name: Integrations
+- id: memberful-enterprise
+  name: Enterprise
+  type: enterprise
+  description: >-
+    Custom, volume-based pricing with dedicated support, custom implementation,
+    and migration assistance. Contact Memberful sales.
+  entries:
+  - label: Enterprise Agreement
+    name: enterprise
+    type: flat
+    metric: contract
+    limit: -1
+    timeFrame: year
+    geo: global
+    unit: 1
+    price: custom (contact sales)
+    userMultiplied: false
+  elements:
+  - name: Dedicated Support
+  - name: Custom Implementation
+  - name: Migration Assistance
+  - name: Volume Pricing
+- id: memberful-starter-modeled
+  name: Free / Starter (modeled - unconfirmed)
+  type: free
+  description: >-
+    Reported by third-party pricing aggregators as a free tier with a 10%
+    transaction fee. NOT confirmed on Memberful's current pricing page - treat
+    as modeled and verify before relying on it.
+  entries:
+  - label: Base Subscription
+    name: starter_base
+    type: flat
+    metric: subscription
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $0 per month (modeled - unconfirmed)
+    userMultiplied: false
+  - label: Transaction Fee
+    name: starter_transaction_fee
+    type: usage
+    metric: revenue
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: 10% of transaction revenue (modeled - unconfirmed)
+    userMultiplied: false
+  elements:
+  - name: Membership Platform (reduced)
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

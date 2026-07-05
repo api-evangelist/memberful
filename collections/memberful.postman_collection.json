@@ -1,0 +1,120 @@
+{
+  "info": {
+    "name": "Memberful GraphQL API",
+    "description": "Memberful is a Patreon-owned membership and subscription platform. It exposes a single GraphQL endpoint per account at POST https://{{account}}.memberful.com/api/graphql, authenticated with an API key as a bearer token (or an OAuth 2.0 access token). Requests POST a GraphQL `query` (query or mutation). Errors are returned as HTTP 200 with an `errors` array. Set the `account` variable to your Memberful subdomain and `apiKey` to a Custom Application key. Queries below are honestly modeled from Memberful's public docs and GraphQL API Explorer; verify field names against the live Explorer.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      { "key": "token", "value": "{{apiKey}}", "type": "string" }
+    ]
+  },
+  "variable": [
+    { "key": "account", "value": "your-account", "type": "string" },
+    { "key": "baseUrl", "value": "https://{{account}}.memberful.com/api/graphql", "type": "string" },
+    { "key": "apiKey", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Members",
+      "item": [
+        {
+          "name": "Get member by ID",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"query\": \"query { member(id: \\\"1\\\") { id fullName email subscriptions { id active plan { id label } } } }\"\n}" },
+            "url": { "raw": "{{baseUrl}}", "host": ["{{baseUrl}}"] },
+            "description": "Retrieve a single member with their subscriptions."
+          }
+        },
+        {
+          "name": "List members (paginated)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"query\": \"query { members(first: 25) { edges { cursor node { id email fullName } } pageInfo { hasNextPage endCursor } } }\"\n}" },
+            "url": { "raw": "{{baseUrl}}", "host": ["{{baseUrl}}"] },
+            "description": "List members with cursor-based pagination (first/after)."
+          }
+        },
+        {
+          "name": "Create member",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"query\": \"mutation { memberCreate(email: \\\"new.member@example.com\\\", fullName: \\\"New Member\\\") { id email fullName } }\"\n}" },
+            "url": { "raw": "{{baseUrl}}", "host": ["{{baseUrl}}"] },
+            "description": "Create a new member (documented example mutation)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Subscriptions",
+      "item": [
+        {
+          "name": "Get subscription by ID",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"query\": \"query { subscription(id: \\\"1\\\") { id active status autorenew plan { id label priceCents interval } member { email } } }\"\n}" },
+            "url": { "raw": "{{baseUrl}}", "host": ["{{baseUrl}}"] },
+            "description": "Retrieve a single subscription with its plan and member."
+          }
+        },
+        {
+          "name": "List subscriptions (paginated)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"query\": \"query { subscriptions(first: 25) { edges { node { id active status plan { label } } } pageInfo { hasNextPage endCursor } } }\"\n}" },
+            "url": { "raw": "{{baseUrl}}", "host": ["{{baseUrl}}"] },
+            "description": "List subscriptions with cursor-based pagination."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Plans and Passes",
+      "item": [
+        {
+          "name": "List passes",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"query\": \"query { passes { id name forSale plans { id label priceCents interval } } }\"\n}" },
+            "url": { "raw": "{{baseUrl}}", "host": ["{{baseUrl}}"] },
+            "description": "List passes (dashboard \"Plans\") and the pricing plans within each."
+          }
+        },
+        {
+          "name": "List plans",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"query\": \"query { plans { id label priceCents currency interval intervalCount forSale } }\"\n}" },
+            "url": { "raw": "{{baseUrl}}", "host": ["{{baseUrl}}"] },
+            "description": "List all plans (pricing options) across passes."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "List orders (paginated)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"query\": \"query { orders(first: 25) { edges { cursor node { id number status totalCents currency member { email } } } pageInfo { hasNextPage endCursor } } }\"\n}" },
+            "url": { "raw": "{{baseUrl}}", "host": ["{{baseUrl}}"] },
+            "description": "List orders (transaction records) with cursor-based pagination."
+          }
+        }
+      ]
+    }
+  ]
+}

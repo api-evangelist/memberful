@@ -1,0 +1,101 @@
+aid: memberful
+name: Memberful
+review:
+  question: Does Memberful expose a documented public WebSocket API?
+  answer: false
+  date: '2026-07-05'
+  reviewer: API Evangelist
+  asyncapiSpecCreated: false
+  asyncapiScopeNote: |
+    No AsyncAPI document was authored. Memberful's event surface is HMAC-signed
+    HTTP webhooks (POST requests with a JSON payload and an
+    X-Memberful-Webhook-Signature header), which is server-to-endpoint HTTP, not
+    a WebSocket or SSE stream on Memberful's own API. There is no server-push
+    transport on Memberful's public API to model as AsyncAPI.
+findings:
+  summary: |
+    Memberful does not publish a documented public WebSocket API. Memberful is a
+    Patreon-owned membership and subscription platform. Its public developer
+    surface is a native GraphQL API served per account at
+    POST https://ACCOUNT.memberful.com/api/graphql, authenticated with an API
+    key as a bearer token or an OAuth 2.0 access token. The GraphQL endpoint is
+    request/response over HTTPS. Event delivery is handled by HMAC-SHA256-signed
+    HTTP webhooks (POST with JSON) rather than any realtime bidirectional
+    channel. Memberful also provides OAuth 2.0 Authorization Code (with PKCE)
+    single sign-on for apps. No WebSocket (ws:// or wss://) endpoint is
+    documented anywhere in Memberful's API, OAuth, or webhook documentation.
+  apiType: |
+    GraphQL. A single per-account GraphQL endpoint exposes queries and mutations
+    over objects including Member, Subscription, Pass, Plan, Coupon, Order, and
+    Download, with cursor-based pagination (first/after/last/before). The live
+    GraphQL API Explorer in the dashboard is Memberful's authoritative,
+    always-current schema.
+  transports:
+    - protocol: GraphQL
+      scheme: https
+      baseURL: https://ACCOUNT.memberful.com/api/graphql
+      documented: true
+      note: Single per-account GraphQL endpoint. POST a `query` parameter; bearer API key or OAuth token. Errors returned as HTTP 200 with an errors array.
+    - protocol: OAuth
+      scheme: https
+      documented: true
+      note: OAuth 2.0 Authorization Code with PKCE. Authorize at /oauth, exchange at /oauth/token, query member at /api/graphql/member. 15-minute access tokens, 1-year refresh tokens.
+    - protocol: Webhook
+      scheme: https
+      documented: true
+      note: HMAC-SHA256-signed HTTP webhooks (POST JSON with X-Memberful-Webhook-Signature). Server-to-endpoint HTTP, not WebSocket.
+    - protocol: WebSocket
+      scheme: wss
+      documented: false
+      note: No WebSocket endpoint is documented in Memberful's API, OAuth, or webhook reference as of the review date.
+  webhookEvents:
+    - member_signup
+    - member_updated
+    - member.deleted
+    - tax_id.updated
+    - custom_fields.updated
+    - subscription.created
+    - subscription.updated
+    - subscription.renewed
+    - subscription.activated
+    - subscription.deactivated
+    - subscription.deleted
+    - subscription_plan.created
+    - subscription_plan.updated
+    - subscription_plan.deleted
+    - order.purchased
+    - order.completed
+    - order.refunded
+    - order.suspended
+    - download.created
+    - download.updated
+    - download.deleted
+sources:
+  - url: https://memberful.com/help/custom-development-and-api/memberful-api/
+    type: Documentation
+    note: GraphQL API overview; single per-account endpoint /api/graphql, bearer API key, POST query parameter, cursor pagination. No WebSocket.
+  - url: https://memberful.com/docs/api-reference/memberful-api
+    type: APIReference
+    note: Confirms Member/Subscription/Pass/Plan objects and the memberCreate mutation; directs to the live GraphQL API Explorer for the full schema.
+  - url: https://memberful.com/help/custom-development-and-api/sign-in-for-apps-via-oauth/
+    type: Documentation
+    note: OAuth 2.0 Authorization Code + PKCE; /oauth, /oauth/token, /api/graphql/member. Scope accepted but ignored.
+  - url: https://memberful.com/help/custom-development-and-api/webhooks/
+    type: Documentation
+    note: HMAC-SHA256-signed HTTP webhooks with X-Memberful-Webhook-Signature. Not WebSocket.
+  - url: https://memberful.com/help/custom-development-and-api/webhook-event-reference/
+    type: Documentation
+    note: Full webhook event identifier list (member/subscription/plan/order/download events).
+  - url: https://memberful.com/pricing/
+    type: Pricing
+    note: Standard $49/month + 4.9% transaction fee; Enterprise custom. Patreon-owned.
+actions:
+  asyncapiPath: null
+  apisYmlUpdated: true
+  reason: |
+    No WebSocket protocol surface exists. Memberful's public API is a native
+    GraphQL endpoint (request/response over HTTPS) with OAuth 2.0 SSO and
+    HMAC-signed HTTP webhooks for events. No AsyncAPI document was created
+    because there is no server-push transport (WebSocket or SSE) on Memberful's
+    own API; webhooks are outbound HTTP POSTs. A modeled GraphQL schema and
+    queries were authored under graphql/ instead.

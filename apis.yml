@@ -1,0 +1,165 @@
+aid: memberful
+url: https://raw.githubusercontent.com/api-evangelist/memberful/refs/heads/main/apis.yml
+name: Memberful
+kind: company
+description: Memberful is a membership and subscription platform (owned by Patreon)
+  that lets independent publishers, educators, and creators sell memberships,
+  subscriptions, digital downloads, podcasts, and courses on their own site while
+  Memberful handles checkout, recurring billing (via Stripe), and member
+  management. Its public developer surface is a GraphQL API served per account at
+  https://ACCOUNT.memberful.com/api/graphql, authenticated with an API key
+  (bearer token) or OAuth 2.0 access token, covering Members, Subscriptions,
+  Plans/Passes, Coupons, and Orders through queries and mutations. Memberful also
+  provides OAuth 2.0 single sign-on for apps and HMAC-signed webhooks for member,
+  subscription, plan, order, and download events.
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+tags:
+- Memberships
+- Subscriptions
+- Payments
+- Creators
+- GraphQL
+- Patreon
+created: '2026-07-05'
+modified: '2026-07-05'
+specificationVersion: '0.19'
+apis:
+- aid: memberful:memberful-members-api
+  name: Memberful Members API
+  tags:
+  - Members
+  - GraphQL
+  - Metadata
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://memberful.com/help/custom-development-and-api/memberful-api/
+  baseURL: https://ACCOUNT.memberful.com/api/graphql
+  properties:
+  - url: https://memberful.com/help/custom-development-and-api/memberful-api/
+    type: Documentation
+  - url: https://memberful.com/docs/api-reference/memberful-api
+    type: APIReference
+  - url: graphql/memberful-schema.graphql
+    type: GraphQL
+  - url: graphql/memberful-graphql.md
+    type: GraphQL
+  - url: collections/memberful.postman_collection.json
+    type: PostmanCollection
+  - url: collections/memberful.opencollection.json
+    type: OpenCollection
+  description: Query members and their profiles, emails, subscriptions, downloads,
+    and custom JSON metadata (up to 50 keys), and create, update, or delete members
+    through GraphQL mutations. Cursor-based pagination (first/after/before/last)
+    is used for the member connection.
+- aid: memberful:memberful-subscriptions-api
+  name: Memberful Subscriptions API
+  tags:
+  - Subscriptions
+  - Recurring Billing
+  - GraphQL
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://memberful.com/help/custom-development-and-api/memberful-api/
+  baseURL: https://ACCOUNT.memberful.com/api/graphql
+  properties:
+  - url: https://memberful.com/help/custom-development-and-api/memberful-api/
+    type: Documentation
+  - url: https://memberful.com/docs/api-reference/memberful-api
+    type: APIReference
+  - url: graphql/memberful-schema.graphql
+    type: GraphQL
+  - url: graphql/memberful-graphql.md
+    type: GraphQL
+  - url: collections/memberful.postman_collection.json
+    type: PostmanCollection
+  - url: collections/memberful.opencollection.json
+    type: OpenCollection
+  description: Read and manage member subscriptions - the link between a member and
+    the pass/plan they pay for - including status, current period, trial state,
+    activation and expiration, and the associated plan pricing. Mutations create,
+    update, and change subscriptions.
+- aid: memberful:memberful-plans-api
+  name: Memberful Plans and Passes API
+  tags:
+  - Plans
+  - Passes
+  - Pricing
+  - GraphQL
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://memberful.com/help/custom-development-and-api/memberful-api/
+  baseURL: https://ACCOUNT.memberful.com/api/graphql
+  properties:
+  - url: https://memberful.com/help/custom-development-and-api/memberful-api/
+    type: Documentation
+  - url: https://memberful.com/docs/api-reference/memberful-api
+    type: APIReference
+  - url: graphql/memberful-schema.graphql
+    type: GraphQL
+  - url: graphql/memberful-graphql.md
+    type: GraphQL
+  - url: collections/memberful.postman_collection.json
+    type: PostmanCollection
+  - url: collections/memberful.opencollection.json
+    type: OpenCollection
+  description: Query the passes members subscribe to (called "Plans" in the
+    dashboard) and the plans (pricing options such as monthly or annual) within
+    each pass, including price, interval, and label. Coupons that discount plans
+    are also exposed here.
+- aid: memberful:memberful-orders-api
+  name: Memberful Orders API
+  tags:
+  - Orders
+  - Transactions
+  - GraphQL
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://memberful.com/help/custom-development-and-api/memberful-api/
+  baseURL: https://ACCOUNT.memberful.com/api/graphql
+  properties:
+  - url: https://memberful.com/help/custom-development-and-api/memberful-api/
+    type: Documentation
+  - url: https://memberful.com/docs/api-reference/memberful-api
+    type: APIReference
+  - url: graphql/memberful-schema.graphql
+    type: GraphQL
+  - url: graphql/memberful-graphql.md
+    type: GraphQL
+  - url: collections/memberful.postman_collection.json
+    type: PostmanCollection
+  - url: collections/memberful.opencollection.json
+    type: OpenCollection
+  description: Query orders (transaction records) for a member or account, including
+    totals, status, coupons applied, and the member and plan involved. Orders back
+    the order.purchased, order.completed, order.refunded, and order.suspended
+    webhook events.
+- aid: memberful:memberful-oauth-sso-api
+  name: Memberful OAuth SSO API
+  tags:
+  - OAuth
+  - SSO
+  - Authentication
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://memberful.com/help/custom-development-and-api/sign-in-for-apps-via-oauth/
+  baseURL: https://ACCOUNT.memberful.com
+  properties:
+  - url: https://memberful.com/help/custom-development-and-api/sign-in-for-apps-via-oauth/
+    type: Documentation
+  description: OAuth 2.0 Authorization Code flow (with PKCE) for signing members
+    into external apps. Authorize at /oauth, exchange the code at /oauth/token,
+    then query the signed-in member at /api/graphql/member. Access tokens expire
+    in 15 minutes; refresh tokens last one year. Scope is accepted but ignored.
+common:
+- type: LinkedIn
+  url: https://www.linkedin.com/company/memberful
+- type: Website
+  url: https://memberful.com
+- type: Documentation
+  url: https://memberful.com/help/custom-development-and-api/
+- type: GitHubOrganization
+  url: https://github.com/memberful
+- type: Plans
+  url: plans/memberful-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/memberful-rate-limits.yml
+- type: FinOps
+  url: finops/memberful-finops.yml
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

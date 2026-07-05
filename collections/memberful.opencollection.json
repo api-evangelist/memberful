@@ -1,0 +1,108 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Memberful GraphQL API",
+    "version": "1.0",
+    "description": "Memberful (Patreon-owned membership and subscription platform) GraphQL API. Single endpoint per account: POST https://{{account}}.memberful.com/api/graphql, bearer-token (API key) or OAuth 2.0 authenticated. Requests POST a GraphQL `query`. Queries are honestly modeled from Memberful's public docs and GraphQL API Explorer."
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{apiKey}}"
+    }
+  },
+  "items": [
+    {
+      "info": { "name": "Members", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Get member by ID", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://{{account}}.memberful.com/api/graphql",
+            "body": { "type": "json", "data": "{\"query\":\"query { member(id: \\\"1\\\") { id fullName email subscriptions { id active plan { id label } } } }\"}" }
+          },
+          "docs": "Retrieve a single member with their subscriptions."
+        },
+        {
+          "info": { "name": "List members (paginated)", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://{{account}}.memberful.com/api/graphql",
+            "body": { "type": "json", "data": "{\"query\":\"query { members(first: 25) { edges { cursor node { id email fullName } } pageInfo { hasNextPage endCursor } } }\"}" }
+          },
+          "docs": "List members with cursor-based pagination (first/after)."
+        },
+        {
+          "info": { "name": "Create member", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://{{account}}.memberful.com/api/graphql",
+            "body": { "type": "json", "data": "{\"query\":\"mutation { memberCreate(email: \\\"new.member@example.com\\\", fullName: \\\"New Member\\\") { id email fullName } }\"}" }
+          },
+          "docs": "Create a new member (documented example mutation)."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Subscriptions", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Get subscription by ID", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://{{account}}.memberful.com/api/graphql",
+            "body": { "type": "json", "data": "{\"query\":\"query { subscription(id: \\\"1\\\") { id active status autorenew plan { id label priceCents interval } member { email } } }\"}" }
+          },
+          "docs": "Retrieve a single subscription with its plan and member."
+        },
+        {
+          "info": { "name": "List subscriptions (paginated)", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://{{account}}.memberful.com/api/graphql",
+            "body": { "type": "json", "data": "{\"query\":\"query { subscriptions(first: 25) { edges { node { id active status plan { label } } } pageInfo { hasNextPage endCursor } } }\"}" }
+          },
+          "docs": "List subscriptions with cursor-based pagination."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Plans and Passes", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List passes", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://{{account}}.memberful.com/api/graphql",
+            "body": { "type": "json", "data": "{\"query\":\"query { passes { id name forSale plans { id label priceCents interval } } }\"}" }
+          },
+          "docs": "List passes (dashboard \"Plans\") and the pricing plans within each."
+        },
+        {
+          "info": { "name": "List plans", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://{{account}}.memberful.com/api/graphql",
+            "body": { "type": "json", "data": "{\"query\":\"query { plans { id label priceCents currency interval intervalCount forSale } }\"}" }
+          },
+          "docs": "List all plans (pricing options) across passes."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Orders", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List orders (paginated)", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://{{account}}.memberful.com/api/graphql",
+            "body": { "type": "json", "data": "{\"query\":\"query { orders(first: 25) { edges { cursor node { id number status totalCents currency member { email } } } pageInfo { hasNextPage endCursor } } }\"}" }
+          },
+          "docs": "List orders (transaction records) with cursor-based pagination."
+        }
+      ]
+    }
+  ]
+}

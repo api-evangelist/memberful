@@ -1,0 +1,329 @@
+"""
+Memberful GraphQL Schema
+
+Memberful exposes a single GraphQL endpoint per account:
+
+    POST https://ACCOUNT.memberful.com/api/graphql
+
+Authenticated with an API key as a bearer token (Authorization: Bearer <key>)
+or an OAuth 2.0 access token. Requests POST a `query` parameter containing the
+GraphQL query or mutation. Errors are returned with HTTP 200 and an `errors`
+array in the JSON body.
+
+This schema is HONESTLY MODELED from Memberful's public API documentation and
+GraphQL API Explorer descriptions. Memberful's authoritative, always-current
+schema is the live GraphQL API Explorer inside the dashboard (Settings ->
+Custom applications). The confirmed objects and sample operations from the docs
+- Member (id, fullName, email, subscriptions), Subscription (id, pass, plan),
+Pass, Plan (id, label), Coupon, Order, Download, cursor pagination
+(first/after/before/last), and the memberCreate mutation - are reproduced here;
+field-level details beyond those explicitly documented are modeled and should be
+verified against the live API Explorer.
+"""
+
+# ─────────────────────────────────────────────
+# Scalars
+# ─────────────────────────────────────────────
+
+scalar DateTime
+scalar JSON
+
+# ─────────────────────────────────────────────
+# Enums
+# ─────────────────────────────────────────────
+
+enum SubscriptionInterval {
+  MONTH
+  YEAR
+  WEEK
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  TRIALING
+  PAST_DUE
+  EXPIRED
+  CANCELED
+}
+
+enum OrderStatus {
+  PENDING
+  COMPLETED
+  REFUNDED
+  SUSPENDED
+}
+
+# ─────────────────────────────────────────────
+# Core Entity Types
+# ─────────────────────────────────────────────
+
+"A member (customer) of the Memberful account."
+type Member {
+  id: ID!
+  email: String!
+  username: String
+  fullName: String
+  firstName: String
+  lastName: String
+  phoneNumber: String
+  stripeCustomerId: String
+  unrestrictedAccess: Boolean!
+  totalSpendCents: Int
+  createdAt: DateTime
+  address: Address
+  metadata: JSON
+  customField(key: String!): String
+  subscriptions: [Subscription!]!
+  orders: [Order!]!
+  downloads: [Download!]!
+  creditCards: [CreditCard!]
+}
+
+type Address {
+  street: String
+  city: String
+  state: String
+  postalCode: String
+  country: String
+}
+
+type CreditCard {
+  brand: String
+  lastFourDigits: String
+  expMonth: Int
+  expYear: Int
+}
+
+"A member's subscription to a pass, paid for on a specific plan."
+type Subscription {
+  id: ID!
+  active: Boolean!
+  status: SubscriptionStatus!
+  autorenew: Boolean!
+  inTrialPeriod: Boolean!
+  member: Member!
+  pass: Pass
+  plan: Plan!
+  coupon: Coupon
+  createdAt: DateTime
+  activatedAt: DateTime
+  expiresAt: DateTime
+  trialStartAt: DateTime
+  trialEndAt: DateTime
+}
+
+"A pass is what members subscribe to (labeled \"Plan\" in the Memberful dashboard)."
+type Pass {
+  id: ID!
+  name: String!
+  slug: String
+  forSale: Boolean!
+  plans: [Plan!]!
+}
+
+"A plan is a pricing option within a pass (for example \"$10 / month\")."
+type Plan {
+  id: ID!
+  label: String!
+  priceCents: Int!
+  currency: String
+  interval: SubscriptionInterval
+  intervalCount: Int
+  forSale: Boolean!
+  additionalMemberPriceCents: Int
+  renewalPeriod: String
+}
+
+"A discount code that can be applied to a plan at checkout."
+type Coupon {
+  id: ID!
+  code: String!
+  discountType: String
+  discountAmountCents: Int
+  discountPercent: Int
+  expiresAt: DateTime
+  maxRedemptions: Int
+  redemptionsCount: Int
+}
+
+"A transaction record for a purchase or renewal."
+type Order {
+  id: ID!
+  uuid: String
+  number: String
+  status: OrderStatus!
+  totalCents: Int!
+  subtotalCents: Int
+  taxCents: Int
+  currency: String
+  receiptEmail: String
+  createdAt: DateTime
+  member: Member!
+  subscription: Subscription
+  plan: Plan
+  coupon: Coupon
+}
+
+"A digital download entitlement available to a member."
+type Download {
+  id: ID!
+  name: String!
+  slug: String
+  url: String
+}
+
+# ─────────────────────────────────────────────
+# Connections (cursor pagination)
+# ─────────────────────────────────────────────
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+type MemberEdge {
+  cursor: String!
+  node: Member!
+}
+
+type MemberConnection {
+  edges: [MemberEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int
+}
+
+type OrderEdge {
+  cursor: String!
+  node: Order!
+}
+
+type OrderConnection {
+  edges: [OrderEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int
+}
+
+type SubscriptionEdge {
+  cursor: String!
+  node: Subscription!
+}
+
+type SubscriptionConnection {
+  edges: [SubscriptionEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int
+}
+
+# ─────────────────────────────────────────────
+# Input Types
+# ─────────────────────────────────────────────
+
+input AddressInput {
+  street: String
+  city: String
+  state: String
+  postalCode: String
+  country: String
+}
+
+input MemberCreateInput {
+  email: String!
+  fullName: String
+  firstName: String
+  lastName: String
+  username: String
+  phoneNumber: String
+  password: String
+  unrestrictedAccess: Boolean
+  address: AddressInput
+  metadata: JSON
+}
+
+input MemberUpdateInput {
+  id: ID!
+  email: String
+  fullName: String
+  firstName: String
+  lastName: String
+  username: String
+  phoneNumber: String
+  unrestrictedAccess: Boolean
+  address: AddressInput
+  metadata: JSON
+}
+
+input SubscriptionCreateInput {
+  memberId: ID!
+  planId: ID!
+  couponCode: String
+  expiresAt: DateTime
+}
+
+input SubscriptionUpdateInput {
+  id: ID!
+  planId: ID
+  autorenew: Boolean
+  expiresAt: DateTime
+}
+
+# ─────────────────────────────────────────────
+# Query Root
+# ─────────────────────────────────────────────
+
+type Query {
+  "Retrieve a single member by ID."
+  member(id: ID!): Member
+
+  "List members with cursor-based pagination."
+  members(first: Int, after: String, last: Int, before: String): MemberConnection!
+
+  "Retrieve a single subscription by ID."
+  subscription(id: ID!): Subscription
+
+  "List subscriptions with cursor-based pagination."
+  subscriptions(first: Int, after: String, last: Int, before: String): SubscriptionConnection!
+
+  "Retrieve a single order by ID."
+  order(id: ID!): Order
+
+  "List orders with cursor-based pagination."
+  orders(first: Int, after: String, last: Int, before: String): OrderConnection!
+
+  "List all passes (dashboard \"Plans\") on the account."
+  passes: [Pass!]!
+
+  "Retrieve a single pass by ID."
+  pass(id: ID!): Pass
+
+  "List all plans (pricing options) across passes."
+  plans: [Plan!]!
+
+  "Retrieve a single plan by ID."
+  plan(id: ID!): Plan
+
+  "List coupons on the account."
+  coupons: [Coupon!]!
+}
+
+# ─────────────────────────────────────────────
+# Mutation Root
+# ─────────────────────────────────────────────
+
+type Mutation {
+  "Create a new member (documented example mutation)."
+  memberCreate(input: MemberCreateInput!): Member!
+
+  "Update an existing member's profile, access, or metadata."
+  memberUpdate(input: MemberUpdateInput!): Member!
+
+  "Delete a member from the account."
+  memberDelete(id: ID!): Boolean!
+
+  "Grant a member a subscription to a plan."
+  subscriptionCreate(input: SubscriptionCreateInput!): Subscription!
+
+  "Update a member's subscription (plan change, autorenew, expiration)."
+  subscriptionUpdate(input: SubscriptionUpdateInput!): Subscription!
+}
