@@ -146,6 +146,10 @@ apis:
     then query the signed-in member at /api/graphql/member. Access tokens expire
     in 15 minutes; refresh tokens last one year. Scope is accepted but ignored.
 common:
+- type: VulnerabilityDisclosure
+  url: security/memberful-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/memberful-domain-security.yml
 - type: LinkedIn
   url: https://www.linkedin.com/company/memberful
 - type: Website
