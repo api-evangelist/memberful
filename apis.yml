@@ -12,7 +12,19 @@ description: Memberful is a membership and subscription platform (owned by Patre
   Plans/Passes, Coupons, and Orders through queries and mutations. Memberful also
   provides OAuth 2.0 single sign-on for apps and HMAC-signed webhooks for member,
   subscription, plan, order, and download events.
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Freemium
+  confidence: medium
+  source:
+  - plans
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/memberful.png
 tags:
 - Memberships
 - Subscriptions
