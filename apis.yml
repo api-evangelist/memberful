@@ -27,6 +27,13 @@ accessModel:
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/memberful.png
 tags:
 - Memberships
+- Subscription
+- Payments
+- Creators
+- GraphQL
+- Patreon
+tags_raw:
+- Memberships
 - Subscriptions
 - Payments
 - Creators
@@ -65,6 +72,10 @@ apis:
 - aid: memberful:memberful-subscriptions-api
   name: Memberful Subscriptions API
   tags:
+  - Subscription
+  - Recurring Billing
+  - GraphQL
+  tags_raw:
   - Subscriptions
   - Recurring Billing
   - GraphQL
@@ -118,6 +129,10 @@ apis:
 - aid: memberful:memberful-orders-api
   name: Memberful Orders API
   tags:
+  - Order
+  - Transaction
+  - GraphQL
+  tags_raw:
   - Orders
   - Transactions
   - GraphQL
@@ -144,6 +159,9 @@ apis:
 - aid: memberful:memberful-oauth-sso-api
   name: Memberful OAuth SSO API
   tags:
+  - Authentication
+  - SSO
+  tags_raw:
   - OAuth
   - SSO
   - Authentication
