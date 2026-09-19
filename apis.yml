@@ -37,7 +37,7 @@ accessModel:
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/memberful.png
 tags:
-- Memberships
+- Membership
 - Subscription
 - Payments
 - Creators
