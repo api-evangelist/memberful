@@ -26,7 +26,7 @@
     app_slug: memberful
     beta: false
     builder: unknown (not in the directory record)
-  status: pending-partner-spec
+  status: not-a-workflow
   arazzo: null
 - slug: memberful-pipedream
   label: Pipedream
@@ -52,5 +52,5 @@
     actions: false
     sources: true
     builder: Pipedream repo (component)
-  status: pending-partner-spec
+  status: not-a-workflow
   arazzo: null
