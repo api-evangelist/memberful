@@ -81,5 +81,5 @@
     quality:
     - silver
     builder: 'community (Meltano Hub variant maintainers: prratek)'
-  status: pending-partner-spec
+  status: not-a-workflow
   arazzo: null
