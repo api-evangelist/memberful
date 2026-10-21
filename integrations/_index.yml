@@ -83,3 +83,34 @@
     builder: Pipedream repo (component)
   status: not-a-workflow
   arazzo: null
+- slug: memberful-stripe-partner-ecosystem
+  label: Stripe Partner Ecosystem
+  partner: stripe
+  partner_name: Stripe Partner Ecosystem
+  category: Stripe ecosystem partner
+  type: register
+  channel: standard-directory
+  evidence: https://stripe.partners/directory/memberful
+  source: edge
+  relationship: standard-participant
+  contract_reference:
+    register: Stripe Partner Ecosystem directory (stripe.com/partners/directory -> stripe.partners, PartnerPage
+      SSR __NUXT_DATA__)
+    standard: Stripe Partner Ecosystem
+    spec_file: null
+    role: stripe-partner
+    registered_name: Memberful
+    register_id: memberful
+    partner_tier: null
+    matched_domain: memberful.com
+    matched_by: domain
+    identity_source: the directory's own website field for the partner (no lookup)
+    signal_note: 'participation only: directory listing (verification tier, if any, in partner_tier)'
+    context:
+      callouts:
+      - Invoicing and subscriptions
+      location: San Francisco, United States
+    detected_by: sweep-stripe-app-marketplace.py
+    detected: '2026-10-21'
+  status: not-a-workflow
+  arazzo: null
