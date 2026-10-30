@@ -1,4 +1,4 @@
-# Memberful (memberful)
+# Memberful
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,93 +64,121 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Memberful is a membership and subscription platform - owned by Patreon - that lets independent publishers, educators, and creators sell memberships, subscriptions, digital downloads, podcasts, and courses on their own site while Memberful handles checkout, recurring billing (through Stripe), and member management. Its public developer surface is a **native GraphQL API**, served per account at `POST https://ACCOUNT.memberful.com/api/graphql` and authenticated with an API key (bearer token) or an OAuth 2.0 access token. Memberful also offers OAuth 2.0 single sign-on for apps and HMAC-signed HTTP webhooks.
+Memberful is a membership and subscription platform (owned by Patreon) that lets independent publishers, educators, and creators sell memberships, subscriptions, digital downloads, podcasts, and courses on their own site while Memberful handles checkout, recurring billing (via Stripe), and member management. Its public developer surface is a GraphQL API served per account at https://ACCOUNT.memberful.com/api/graphql, authenticated with an API key (bearer token) or OAuth 2.0 access token, covering Members, Subscriptions, Plans/Passes, Coupons, and Orders through queries and mutations. Memberful also provides OAuth 2.0 single sign-on for apps and HMAC-signed webhooks for member, subscription, plan, order, and download events.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/memberful/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/memberful/refs/heads/main/apis.yml)
+**Areas:** Membership · Subscription · Payments · Creators · GraphQL · Patreon
 
-## Access model
+## Memberful on APIs.io
 
-Memberful prices the **platform**, not the API: the GraphQL API, OAuth SSO, and webhooks are included with a paid Memberful plan at no separate API fee. You create an API key by adding a Custom Application under Settings → Custom applications. The API is a single per-account GraphQL endpoint - there is no REST surface and no WebSocket. The always-current schema is the live **GraphQL API Explorer** in the dashboard; the schema and queries in this repo are honestly modeled from Memberful's public documentation and confirmed object descriptions, and modeled fields should be verified against that Explorer.
+Everything profiled for Memberful is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/memberful/](https://apis.io/providers/memberful/)** — or go straight to one of the APIs or properties below.
 
-## Tags
+### APIs (5)
 
-- Memberships
-- Subscriptions
-- Payments
-- Creators
-- GraphQL
-- Patreon
+- [Memberful Members API](https://apis.io/apis/memberful/memberful-members-api/) — Query members and their profiles, emails, subscriptions, downloads, and custom JSON metadata (up to 50 keys), and create, update, or delete members through…
+- [Memberful Subscriptions API](https://apis.io/apis/memberful/memberful-subscriptions-api/) — Read and manage member subscriptions - the link between a member and the pass/plan they pay for - including status, current period, trial state, activation…
+- [Memberful Plans and Passes API](https://apis.io/apis/memberful/memberful-plans-api/) — Query the passes members subscribe to (called "Plans" in the dashboard) and the plans (pricing options such as monthly or annual) within each pass,…
+- [Memberful Orders API](https://apis.io/apis/memberful/memberful-orders-api/) — Query orders (transaction records) for a member or account, including totals, status, coupons applied, and the member and plan involved. Orders back the…
+- [Memberful OAuth SSO API](https://apis.io/apis/memberful/memberful-oauth-sso-api/) — OAuth 2.0 Authorization Code flow (with PKCE) for signing members into external apps. Authorize at /oauth, exchange the code at /oauth/token, then query the…
 
-## Timestamps
+### Published properties
 
-- **Created:** 2026-07-05
-- **Modified:** 2026-07-05
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-## APIs
+#### GraphQL (1)
 
-### Memberful Members API
+GraphQL schemas.
 
-Query members and their profiles, emails, subscriptions, downloads, and custom JSON metadata (up to 50 keys), and create, update, or delete members through GraphQL mutations. Uses cursor-based pagination.
+- [Memberful GraphQL API](https://apis.io/graphqls/memberful/memberful-graphql/)
 
-- **Human URL:** [https://memberful.com/help/custom-development-and-api/memberful-api/](https://memberful.com/help/custom-development-and-api/memberful-api/)
-- **Base URL:** `https://ACCOUNT.memberful.com/api/graphql`
+#### Collections (1)
 
-#### Properties
+Postman and Open Collection request collections.
 
-- [Documentation](https://memberful.com/help/custom-development-and-api/memberful-api/)
-- [API Reference](https://memberful.com/docs/api-reference/memberful-api)
-- [GraphQL Schema](graphql/memberful-schema.graphql)
-- [GraphQL Guide](graphql/memberful-graphql.md)
-- [Postman Collection](collections/memberful.postman_collection.json)
-- [Open Collection](collections/memberful.opencollection.json)
+- [Memberful GraphQL API](https://apis.io/collections/memberful/open-memberful/)
 
-### Memberful Subscriptions API
+#### Security (2)
 
-Read and manage member subscriptions - the link between a member and the pass/plan they pay for - including status, current period, trial state, activation and expiration, and the associated plan pricing.
+Authentication, trust centre, and vulnerability disclosure.
 
-- **Human URL:** [https://memberful.com/help/custom-development-and-api/memberful-api/](https://memberful.com/help/custom-development-and-api/memberful-api/)
-- **Base URL:** `https://ACCOUNT.memberful.com/api/graphql`
+- [Memberful Domain Security](https://apis.io/security/memberful/memberful-domain-security/)
+- [Memberful Vulnerability Disclosure](https://apis.io/security/memberful/memberful-vulnerability-disclosure/)
 
-### Memberful Plans and Passes API
+#### Plans and pricing (1)
 
-Query the passes members subscribe to (called "Plans" in the dashboard) and the plans (pricing options such as monthly or annual) within each pass, including price, interval, and label. Coupons are also exposed here.
+Published plans, tiers and prices.
 
-- **Human URL:** [https://memberful.com/help/custom-development-and-api/memberful-api/](https://memberful.com/help/custom-development-and-api/memberful-api/)
-- **Base URL:** `https://ACCOUNT.memberful.com/api/graphql`
+- [Memberful Plans Pricing](https://apis.io/plans/memberful/memberful-plans-pricing/)
 
-### Memberful Orders API
+#### Rate limits (1)
 
-Query orders (transaction records) for a member or account, including totals, status, coupons applied, and the member and plan involved. Orders back the `order.purchased`, `order.completed`, `order.refunded`, and `order.suspended` webhook events.
+Published request limits.
 
-- **Human URL:** [https://memberful.com/help/custom-development-and-api/memberful-api/](https://memberful.com/help/custom-development-and-api/memberful-api/)
-- **Base URL:** `https://ACCOUNT.memberful.com/api/graphql`
+- [Memberful Rate Limits](https://apis.io/rate-limits/memberful/memberful-rate-limits/)
 
-### Memberful OAuth SSO API
+#### FinOps (1)
 
-OAuth 2.0 Authorization Code flow (with PKCE) for signing members into external apps. Authorize at `/oauth`, exchange the code at `/oauth/token`, then query the signed-in member at `/api/graphql/member`. Access tokens expire in 15 minutes; refresh tokens last one year. Scope is accepted but ignored.
+What the API costs to run, by operation.
 
-- **Human URL:** [https://memberful.com/help/custom-development-and-api/sign-in-for-apps-via-oauth/](https://memberful.com/help/custom-development-and-api/sign-in-for-apps-via-oauth/)
-- **Base URL:** `https://ACCOUNT.memberful.com`
+- [Memberful Finops](https://apis.io/finops/memberful/memberful-finops/)
 
-## Webhooks
+## Where to find this API
 
-Memberful delivers events as HMAC-SHA256-signed HTTP POSTs (JSON body, `X-Memberful-Webhook-Signature` header) - not a WebSocket. Documented event identifiers include `member_signup`, `member_updated`, `member.deleted`, `subscription.created`, `subscription.activated`, `subscription.deactivated`, `subscription.renewed`, `subscription.deleted`, `subscription_plan.created`, `subscription_plan.updated`, `subscription_plan.deleted`, `order.purchased`, `order.completed`, `order.refunded`, `order.suspended`, and `download.created`.
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
-## Common Properties
-
-- [LinkedIn](https://www.linkedin.com/company/memberful)
 - [Website](https://memberful.com)
 - [Documentation](https://memberful.com/help/custom-development-and-api/)
-- [GitHub Organization](https://github.com/memberful)
-- [Plans](plans/memberful-plans-pricing.yml)
-- [Rate Limits](rate-limits/memberful-rate-limits.yml)
-- [Fin Ops](finops/memberful-finops.yml)
+- [Blog](https://memberful.com/blog)
+- [GitHub](https://github.com/memberful)
 
-## Pricing
+## API Evangelist rating
 
-Memberful's published plan is **Standard at $49/month plus a 4.9% Memberful transaction fee**, with unlimited members and the full feature set; **Enterprise** is custom-priced with dedicated support and migration help. Stripe charges its own ~2.9% + $0.30 per transaction for payment processing, separately from Memberful's fee. Third-party aggregators also report Free/Starter (10% fee), Pro ($25/mo), and Premium ($100/mo) tiers, which are not confirmed on Memberful's current pricing page and are flagged as modeled in the plans file.
+**Kin Score 11.5** — emerging · rubric 0.24.0 · scored 2026-10-17
 
-## Maintainers
+| Facet | Score |
+|---|---|
+| Discoverability | 71.4 |
+| Contract quality | 0.0 |
+| Contract governance | 0.0 |
+| Operational transparency | 10.5 |
+| Developer ergonomics | 13.8 |
+| Access clarity | 7.9 |
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Agent readiness 0.6** — human-only
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | — |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | — |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | — |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 10.7** — Payments
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/memberful/](https://apis.io/providers/memberful/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Memberful: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/memberful/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
